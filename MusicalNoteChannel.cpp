@@ -5,25 +5,30 @@
 #include "AbstractMusicalNote.h"
 
 
-FMusicNoteAndDistance UMusicalNoteChannel::GetClosestNoteAtLocation(float Location)
+FMusicNoteAndDistance UMusicalNoteChannel::GetClosestNoteAtLocation(float TargetLocation)
 {
-	//Check to see if location is closest to first note
-	if ((MusicalNotes[0]->Duration / 2.0f) > Location) {
-		return { MusicalNotes[0], Location };
-	}
-	float CurrentLocation = 0.0f;
-	UAbstractMusicalNote* PreviousNote = MusicalNotes[0];
-	UAbstractMusicalNote* CurrentNote;
-	for (int i = 0; i < MusicalNotes.Num(); i++) {
-		CurrentLocation += MusicalNotes[i]->Duration;
-		if (CurrentLocation > Location) {
-			CurrentNote = MusicalNotes[i];
-			break;
+	//Test if the first note is the closest
+	if (TargetLocation < MusicalNotes[0]->Duration / 2.0f) {
+		if (TargetLocation < 0) {
+			return{ MusicalNotes[0], -TargetLocation };
 		}
-		PreviousNote = MusicalNotes[i];
+		return { MusicalNotes[0], TargetLocation };
 	}
-	if ((CurrentLocation - Location) < Location - (CurrentLocation - CurrentNote->Duration)) {
-		return { CurrentNote, CurrentLocation - Location };
+
+	UAbstractMusicalNote* NoteBeforeCurrentLocation = MusicalNotes[0];
+	UAbstractMusicalNote* NoteAtCurrentLocation = MusicalNotes[1];
+
+	float CurrentLocation = 0.0f;
+	for (int i = 1; i < MusicalNotes.Num(); i++) {
+		NoteBeforeCurrentLocation = MusicalNotes[i-1];
+		NoteAtCurrentLocation = MusicalNotes[i];
+		CurrentLocation += NoteBeforeCurrentLocation->Duration;
+		if (CurrentLocation > TargetLocation) {
+			if (CurrentLocation - TargetLocation < TargetLocation - (CurrentLocation - NoteBeforeCurrentLocation->Duration)) {
+				return { NoteAtCurrentLocation, CurrentLocation - TargetLocation };
+			}
+			return { NoteBeforeCurrentLocation, TargetLocation - (CurrentLocation - NoteBeforeCurrentLocation->Duration) };
+		}
 	}
-	return { PreviousNote, Location - (CurrentLocation - CurrentNote->Duration) };
+	return { MusicalNotes[MusicalNotes.Num() - 1], TargetLocation - CurrentLocation } ;
 }

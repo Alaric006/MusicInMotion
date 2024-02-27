@@ -75,10 +75,15 @@ void AMusicalInstrument::MulticastPlayNote_Implementation(USoundBase* PlaySound,
 
 void AMusicalInstrument::SetMusicLocation(float NewMusicLocation)
 {
-	AMusicalInstrument::MusicLocation = MusicLocation;
+	AMusicalInstrument::MusicLocation = NewMusicLocation;
+	FString DebugMessage = TEXT("Current Music Location: {0}");
+	DebugMessage = FString::Format(*DebugMessage, { MusicLocation });
+	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, DebugMessage);
 	for (int i = 0; i < InstrumentParts.Num(); i++) {
 		int InstrumentPartCurrentMusicNoteDuration = InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[CurrentMusicNoteIndices[i]]->Duration;
 		if (NewMusicLocation > CurrentMusicNoteLocationOffsets[i]) {
+			UE_LOG(LogTemp, Warning, TEXT("Current music note duration is: %f"), InstrumentPartCurrentMusicNoteDuration);
+			UE_LOG(LogTemp, Warning, TEXT("Current music note location offset is %f"), CurrentMusicNoteLocationOffsets[i]);
 			CurrentMusicNoteLocationOffsets[i] += (float) InstrumentPartCurrentMusicNoteDuration;
 			CurrentMusicNoteIndices[i] += 1;
 			if (!InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[CurrentMusicNoteIndices[i]]->IsRest) {

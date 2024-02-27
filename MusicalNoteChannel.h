@@ -9,7 +9,9 @@
  * 
  */
 class UAbstractMusicalNote;
+USTRUCT(BlueprintType)
 struct FMusicNoteAndDistance {
+	GENERATED_BODY();
 	UAbstractMusicalNote* MusicNote;
 	float Distance;
 
@@ -26,5 +28,5 @@ public:
 
 	//Returns distance away from note
 	UFUNCTION(BlueprintCallable)
-	FMusicNoteAndDistance GetClosestNoteAtLocation(float Location);
+	struct FMusicNoteAndDistance GetClosestNoteAtLocation(float TargetLocation);
 };

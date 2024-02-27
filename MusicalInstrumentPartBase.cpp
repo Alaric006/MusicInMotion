@@ -42,7 +42,7 @@ void AMusicalInstrumentPartBase::SpawnNote(int Tempo, int NoteDuration)
 	float ScaleMultiplier = (NoteDuration / (NoteDurationInGap / 4.0f)) * (DistanceInBetweenSpawnAndPlay / 100.0f) * MusicNoteScalingFactor;
 
 
-	GEngine->AddOnScreenDebugMessage(2, 1.0f, FColor::Red, FString::Format(TEXT("Spawning note with speed {0} at location {1} {2} {3}"), { MusicNoteTravelSpeed, SpawnLocation.X,SpawnLocation.Y, SpawnLocation.Z }));
+	GEngine->AddOnScreenDebugMessage(2, 1.0f, FColor::Red, FString::Format(TEXT("Spawning note with speed {0}, scale multiplier {4} at location {1} {2} {3}"), { MusicNoteTravelSpeed, SpawnLocation.X,SpawnLocation.Y, SpawnLocation.Z, ScaleMultiplier }));
 
 	AMusicNote* SpawnedMusicNote = Cast<AMusicNote>(GetWorld()->SpawnActor(MusicNoteSpawningClass, &SpawnLocation, &SpawnRotation));
 	SpawnedMusicNote->Initialize(MusicNoteTravelSpeed, MusicNotesDirection);

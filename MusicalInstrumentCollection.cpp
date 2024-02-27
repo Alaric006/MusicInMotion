@@ -40,9 +40,6 @@ void AMusicalInstrumentCollection::StartSong(UMusicInMotionSong* SongToStart)
 
 void AMusicalInstrumentCollection::UpdateInstrumentMusicLocations()
 {
-	FString DebugMessage = TEXT("Current Music Location: {0}");
-	DebugMessage = FString::Format(*DebugMessage, { MusicLocation });
-	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, DebugMessage);
 	for (AMusicalInstrument* MusicalInstrument : MusicalInstruments) {
 		MusicalInstrument->SetMusicLocation(this->MusicLocation);
 	}
