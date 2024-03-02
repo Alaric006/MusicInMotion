@@ -30,6 +30,7 @@ AMusicalInstrument::AMusicalInstrument()
 	Collider->OnComponentBeginOverlap.AddDynamic(this, &AMusicalInstrument::BeginOverlap);
 	Collider->OnComponentEndOverlap.AddDynamic(this, &AMusicalInstrument::EndOverlap);
 	Collider->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
+	FailedPlaySoundVolumeModifier = 1.0f;
 
 }
 
@@ -80,14 +81,14 @@ void AMusicalInstrument::SetMusicLocation(float NewMusicLocation)
 	DebugMessage = FString::Format(*DebugMessage, { MusicLocation });
 	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, DebugMessage);
 	for (int i = 0; i < InstrumentParts.Num(); i++) {
-		int InstrumentPartCurrentMusicNoteDuration = InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[CurrentMusicNoteIndices[i]]->Duration;
+		float InstrumentPartCurrentMusicNoteDuration = InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[CurrentMusicNoteIndices[i]]->Duration;
 		if (NewMusicLocation > CurrentMusicNoteLocationOffsets[i]) {
 			UE_LOG(LogTemp, Warning, TEXT("Current music note duration is: %f"), InstrumentPartCurrentMusicNoteDuration);
 			UE_LOG(LogTemp, Warning, TEXT("Current music note location offset is %f"), CurrentMusicNoteLocationOffsets[i]);
-			CurrentMusicNoteLocationOffsets[i] += (float) InstrumentPartCurrentMusicNoteDuration;
 			CurrentMusicNoteIndices[i] += 1;
+			InstrumentPartCurrentMusicNoteDuration = InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[CurrentMusicNoteIndices[i]]->Duration;
+			CurrentMusicNoteLocationOffsets[i] += InstrumentPartCurrentMusicNoteDuration;
 			if (!InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[CurrentMusicNoteIndices[i]]->IsRest) {
-				InstrumentPartCurrentMusicNoteDuration = InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[CurrentMusicNoteIndices[i]]->Duration;
 				InstrumentParts[i]->SpawnNote(SongTempo, InstrumentPartCurrentMusicNoteDuration);
 			}
 		}
@@ -97,16 +98,17 @@ void AMusicalInstrument::SetMusicLocation(float NewMusicLocation)
 void AMusicalInstrument::SpawnStartingNotes()
 {
 	for (int i = 0; i < InstrumentSongChannel->MusicNoteChannels.Num(); i++) {
-		CurrentMusicNoteIndices[i] = 0;
+		CurrentMusicNoteIndices[0] = 0;
 		CurrentMusicNoteLocationOffsets[i] = (int) InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[0]->Duration;
-		InstrumentParts[i]->SpawnNote(SongTempo, CurrentMusicNoteLocationOffsets[i]);
+		if (!InstrumentSongChannel->MusicNoteChannels[i]->MusicalNotes[0]->IsRest) {
+			InstrumentParts[i]->SpawnNote(SongTempo, CurrentMusicNoteLocationOffsets[i]);
+		}
 	}
 }
 
 
 void AMusicalInstrument::SetActions(AMusicInMotionCharacter* MusicInMotionCharacter)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Running AMusicalInstrument Bind Action, this function should not be running!"));
 }
 
 void AMusicalInstrument::ResetActions(AMusicInMotionCharacter* MusicInMotionCharacter)
@@ -115,9 +117,23 @@ void AMusicalInstrument::ResetActions(AMusicInMotionCharacter* MusicInMotionChar
 	MusicInMotionCharacter->PlayInstrumentPart2.Unbind();
 	MusicInMotionCharacter->PlayInstrumentPart3.Unbind();
 	MusicInMotionCharacter->PlayInstrumentPart4.Unbind();
+	CurrentMusicNoteIndices.Init(0, InstrumentParts.Num());
+	CurrentMusicNoteLocationOffsets.Init(0, InstrumentParts.Num());
 }
 
 void AMusicalInstrument::Play1(){
+}
+
+void AMusicalInstrument::Play2()
+{
+}
+
+void AMusicalInstrument::Play3()
+{
+}
+
+void AMusicalInstrument::Play4()
+{
 }
 
 void AMusicalInstrument::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)

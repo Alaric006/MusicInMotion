@@ -16,7 +16,10 @@ class MUSICINMOTION_API ACylinderInstrument : public AMusicalInstrument
 	GENERATED_BODY()
 	void SetActions(AMusicInMotionCharacter* MusicInMotionCharacter) override;
 
+
 protected:
-	UFUNCTION(BlueprintNativeEvent)
 	void Play1() override;
+	void Play2() override;
+	void Play3() override;
+	void Play4() override;
 };

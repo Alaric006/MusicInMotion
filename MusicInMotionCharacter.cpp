@@ -85,6 +85,9 @@ void AMusicInMotionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMusicInMotionCharacter::Look);
 
 		EnhancedInputComponent->BindAction(Play1Action, ETriggerEvent::Triggered, this, &AMusicInMotionCharacter::OnPlay1Function);
+		EnhancedInputComponent->BindAction(Play2Action, ETriggerEvent::Triggered, this, &AMusicInMotionCharacter::OnPlay2Function);
+		EnhancedInputComponent->BindAction(Play3Action, ETriggerEvent::Triggered, this, &AMusicInMotionCharacter::OnPlay3Function);
+		EnhancedInputComponent->BindAction(Play4Action, ETriggerEvent::Triggered, this, &AMusicInMotionCharacter::OnPlay4Function);
 
 	}
 	else
@@ -131,6 +134,20 @@ void AMusicInMotionCharacter::Look(const FInputActionValue& Value)
 
 void AMusicInMotionCharacter::OnPlay1Function(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Display, TEXT("Inside OnPlay1Function"));
 	PlayInstrumentPart1.ExecuteIfBound();
+}
+
+void AMusicInMotionCharacter::OnPlay2Function(const FInputActionValue& Value)
+{
+	PlayInstrumentPart2.ExecuteIfBound();
+}
+
+void AMusicInMotionCharacter::OnPlay3Function(const FInputActionValue& Value)
+{
+	PlayInstrumentPart3.ExecuteIfBound();
+}
+
+void AMusicInMotionCharacter::OnPlay4Function(const FInputActionValue& Value)
+{
+	PlayInstrumentPart4.ExecuteIfBound();
 }

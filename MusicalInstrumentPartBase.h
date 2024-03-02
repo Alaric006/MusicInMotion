@@ -10,6 +10,7 @@ class UMusicSpawnPoint;
 class UStaticMeshComponent;
 class USceneComponent;
 class AMusicNote;
+class UAbstractMusicalNote;
 
 UCLASS()
 class MUSICINMOTION_API AMusicalInstrumentPartBase : public AActor
@@ -57,7 +58,7 @@ public:
 	UFUNCTION(Blueprintcallable)
 	void SpawnNote(int Tempo, int NoteDuration);
 
-	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent);
 	
 
 protected:
@@ -67,5 +68,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnNotePlayed(UAbstractMusicalNote* NotePlayed);
 
 };

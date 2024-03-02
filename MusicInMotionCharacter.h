@@ -60,6 +60,15 @@ class AMusicInMotionCharacter : public ACharacter
 	UFUNCTION()
 	void OnPlay1Function(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void OnPlay2Function(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void OnPlay3Function(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void OnPlay4Function(const FInputActionValue& Value);
+
 public:
 	AMusicInMotionCharacter();
 

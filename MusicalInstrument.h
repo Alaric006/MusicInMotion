@@ -35,6 +35,12 @@ public:
 	TArray<class AMusicalInstrumentPartBase*> InstrumentParts;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Music")
+	USoundBase* FailedPlaySound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Music")
+	float FailedPlaySoundVolumeModifier;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Music")
 	UCapsuleComponent* Collider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Music")
@@ -72,7 +78,7 @@ public:
 			UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex);
 
-	UFUNCTION(NetMulticast, Unreliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void MulticastPlayNote(USoundBase* PlaySound, float volumeModifier = 1.0f, float pitchModifier = 1.0f);
 
 	UFUNCTION()
@@ -88,8 +94,11 @@ public:
 	void ResetActions(AMusicInMotionCharacter* MusicInMotionCharacter);
 
 	virtual void Play1();
+	virtual void Play2();
+	virtual void Play3();
+	virtual void Play4();
 
-	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent);
 
 
 protected:
